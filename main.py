@@ -1,6 +1,7 @@
 import argparse
 from session import *
-from liftsession import *
+from movementsession import *
+from lift import *
 
 sessions = []
 
@@ -10,27 +11,30 @@ def view_sessions():
 		print(sessions[i])
 		i += 1
 
+def tab_prompt(num_tabs, input_str):
+	to_return = (" " * num_tabs) + input_str + " "
+	return str(to_return)
+
 def enter_workout():
-	try:
-		workout = input("How many movements did you do? ")
-		workout = int(workout)
-	except:
-		print("You need to enter a number ")
-		return
+
+	workout = input(tab_prompt(1, "How many movements did you do?"))
+	workout = int(workout)
+
 	session = Session()
 	i = 0
 	while (i < workout):
-		lift = input("What lift did you perform? ")
-		lift_session = LiftSession(lift)
-		sets = input("How many sets did you perform? ")
+		lift = input(tab_prompt(2, "What lift did you perform?"))
+		movement_session = MovementSession(lift)
+		sets = input(tab_prompt(2, "How many sets did you perform?"))
 		sets = int(sets)
 		j = 0
 		while (j < sets):
-			reps = input("Reps? ")
-			rpe = input("Rpe? ")
-			lift_session.add_set(reps, rpe)
+			reps = input(tab_prompt(3, "Reps?"))
+			weight = input(tab_prompt(3, "Weight?"))
+			rpe = input(tab_prompt(3, "Rpe?"))
+			movement_session.add_lift(Lift(reps, weight, rpe))
 			j += 1
-		session.add_session_lift(lift_session)
+		session.add_movement_session(movement_session)
 		i += 1
 	print("Completed entering a workout. Here is your info:")
 	print(session)
@@ -38,7 +42,7 @@ def enter_workout():
 
 def loop():
 	while (1):
-		command = input("Enter command\n")
+		command = input("Enter Command: ")
 
 		if command == "help" or command == "Help" or command == "HELP":
 			print("todo: help")
